@@ -1,0 +1,17 @@
+# blacklist everything
+*
+!.gitignore
+
+# except the dotfiles
+!.hyper.js
+!.myclirc
+!.sshrc.d/
+!.sshrc.d/.vimrc
+!.editorconfig
+!.macos
+!.sshrc
+!.vimrc
+!.zshrc
+!Brewfile
+!LICENSE
+!README.md

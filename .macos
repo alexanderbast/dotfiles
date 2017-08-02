@@ -1,0 +1,259 @@
+#!/usr/bin/env bash
+# BOOTSTRAP MACOS
+
+# close System Preferences
+osascript -e 'tell application "System Preferences" to quit'
+
+# ask for password
+sudo -v
+
+###############################################################################
+# GENERAL                                                                     #
+###############################################################################
+
+# disable boot chime
+sudo nvram SystemAudioVolume=" "
+
+# set computer name
+sudo scutil --set ComputerName "Atze Mac"
+sudo scutil --set HostName "Atze Mac"
+sudo scutil --set LocalHostName "Atze-Mac"
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "Atze Mac"
+
+# system setup settings
+sudo systemsetup -setusingnetworktime on
+sudo systemsetup -setrestartpowerfailure on
+sudo systemsetup -setrestartfreeze on
+sudo systemsetup -setallowpowerbuttontosleepcomputer off
+
+# power management settings
+sudo pmset -a destroyfvkeyonstandby 1
+sudo pmset -a lidwake 0
+sudo pmset -a autopoweroff 0
+sudo pmset -a autopoweroffdelay 0
+sudo pmset -a autorestart 1
+sudo pmset -a standbydelay 0
+sudo pmset -a standby 0
+sudo pmset -a ttyskeepawake 0
+sudo pmset -a hibernatemode 25
+sudo pmset -a powernap 0
+sudo pmset -a displaysleep 0
+sudo pmset -a womp 0
+sudo pmset -a sleep 0
+sudo pmset -a sms 0
+sudo pmset -a acwake 0
+sudo pmset -a halfdim 0
+sudo pmset -a lessbright 0
+sudo pmset -a disksleep 1
+
+# require password immediatly after screen lock
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+# enable automatic update checks for macOS software
+defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
+# check for updates once per day instead of once per week
+defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
+# enable automatic updates of system data & security files
+defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
+
+# always quit applications on Quit
+defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
+
+# don't go into sleep on power button press, show dialog instead
+defaults write com.apple.loginwindow PowerButtonSleepsSystem -bool no
+
+# crash reporter as banner notification instead of pop-up
+defaults write com.apple.CrashReporter UseUNC 1
+
+###############################################################################
+# APPEARANCE                                                                  #
+###############################################################################
+
+# use dark interface
+defaults write AppleInterfaceStyle -string "Dark"
+# show battery percentage
+defaults write com.apple.menuextra.battery ShowPercent -string "yes"
+# never start screen saver
+defaults write com.apple.screensaver idleTime -int 0
+# disable system sounds
+defaults write com.apple.systemsound com.apple.sound.uiaudio.enabled -int 0
+# screenshots to download folder
+defaults write com.apple.screencapture location -string "${HOME}/Downloads"
+# screenshots as JPGs
+defaults write com.apple.screencapture type -string "jpg"
+# screenshots without shadow
+defaults write com.apple.screencapture disable-shadow -bool true
+# turn off keyboard illumination when computer is not used for 5 seconds
+defaults write com.apple.BezelServices kDimTime -int 5
+
+# add iOS & Watch Simulator to Launchpad
+sudo ln -sf "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app" "/Applications/Simulator.app"
+sudo ln -sf "/Applications/Xcode.app/Contents/Developer/Applications/Simulator (Watch).app" "/Applications/Simulator (Watch).app"
+
+###############################################################################
+# PANELS & DIALOGS                                                            #
+###############################################################################
+
+# expand save panel by default
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+# expand print panel by default
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+# enable tab in modal dialogs
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+# disable “Are you sure you want to open this application?” dialogs
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+# don't show an open panel when opening an application like TextEdit or Preview
+defaults write -g NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
+# don't open Photos app on iOS-device connect
+defaults write com.apple.ImageCapture disableHotPlug -bool YES
+# prevent Time Machine from prompting to use hard drives as backup volume
+defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+# quit printer app when finished
+defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
+
+###############################################################################
+# KEYBOARD & TEXT                                                             #
+###############################################################################
+
+# disable auto-correct
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+# disable press-and-hold for keys
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+# set a blazingly fast keyboard repeat rate
+defaults write NSGlobalDomain KeyRepeat -int 1
+defaults write NSGlobalDomain InitialKeyRepeat -int 10
+# enable text replacement in more areas
+defaults write -g WebAutomaticTextReplacementEnabled -bool true
+
+###############################################################################
+# FINDER & FILES                                                              #
+###############################################################################
+
+# disable finder sounds
+defaults write com.apple.finder FinderSounds -boolean false
+# don't show volumes on desktop
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
+defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
+# show Finder status bar
+defaults write com.apple.finder ShowStatusBar -bool true
+# show Finder path bar
+defaults write com.apple.finder ShowPathbar -bool true
+# make path bars path relative to home folder instead of root
+defaults write com.apple.finder PathBarRootAtHome -bool true
+# show path in Finder title
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+# keep folders above files
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+# no .DS_Store files on network and usb drives
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+# no spring loading delay
+defaults write NSGlobalDomain com.apple.springing.delay -float 0
+# enable copy in Quick Look
+defaults write com.apple.finder QLEnableTextSelection -bool true
+# use plain text in TextEdit
+defaults write com.apple.TextEdit RichText -int 0
+# use UTF-8 in TextEdit
+defaults write com.apple.TextEdit PlainTextEncoding -int 4
+defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+# save to disk instead of iCloud by default
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
+# don't spotlight index volumes
+sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
+
+###############################################################################
+# DOCK                                                                        #
+###############################################################################
+
+# show hover in stack view
+defaults write com.apple.dock mouse-over-hilite-stack -bool true
+# minimize windows behind app symbols
+defaults write com.apple.dock minimize-to-application -bool true
+# show indicators for active apps
+defaults write com.apple.dock show-process-indicators -bool true
+# autohide Dock
+defaults write com.apple.dock autohide -bool true
+# no autohide delay
+defaults write com.apple.dock autohide-delay -float 0
+# enable spring loading for all dock items
+defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
+# disable Dashboard
+defaults write com.apple.dashboard mcx-disabled -bool true
+defaults write com.apple.dock dashboard-in-overlay -bool true
+
+###############################################################################
+# SAFARI                                                                      #
+###############################################################################
+
+# hide favorites bar
+defaults write com.apple.Safari ShowFavoritesBar -bool false
+# open new tab as empty page
+defaults write com.apple.Safari NewTabBehavior -int 1
+# always new tab instead of new window
+defaults write com.apple.Safari TabCreationPolicy -int 2
+# homepage = personal DuckDuckGo settings
+defaults write com.apple.Safari HomePage -string "https://duckduckgo.com/?key=c591fa6b4a9bda65d4af6ee8e03d11c0876331fc3c69ba03a99fe1bec8fe9f97a7f51b9ef521d3440a1ad3dc48d89060d16267f206e71641b090e71839a215ad"
+# don't show favorites
+defaults write com.apple.Safari ShowFavoritesUnderSmartSearchField -bool false
+# don't allow location requests
+defaults write com.apple.Safari SafariGeolocationPermissionPolicy -int 0
+# send 'Do Not Track' header
+defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
+# show full web adress
+defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+# don't open 'safe files' after downloading
+defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+# 'find on page' contains instead of starts-with
+defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
+# warn about fraudulent websites
+defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
+# disable Java
+defaults write com.apple.Safari WebKitJavaEnabled -bool false
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaEnabled -bool false
+# block pop-up windows
+defaults write com.apple.Safari WebKitJavaScriptCanOpenWindowsAutomatically -bool false
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaScriptCanOpenWindowsAutomatically -bool false
+# update extensions automatically
+defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -bool true
+# enable develop menu & web inspector
+defaults write com.apple.Safari IncludeDevelopMenu -bool true
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+# default encoding = UTF-8
+defaults write com.apple.Safari WebKitDefaultTextEncodingName -string "utf-8"
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DefaultTextEncodingName -string "utf-8"
+
+###############################################################################
+# MAIL                                                                        #
+###############################################################################
+
+# copy email adresses without contact name
+defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
+# disable inline attachments (just icons)
+defaults write com.apple.mail DisableInlineAttachmentViewing -bool true
+
+###############################################################################
+# XCODE                                                                       #
+###############################################################################
+
+# let Xcode compile with 4 threads instead of number of CPU cores
+defaults write com.apple.Xcode PBXNumberOfParallelBuildSubtasks 4
+# allow iPhone Simulator in full-screen mode
+defaults write com.apple.iphonesimulator AllowFullscreenMode 1
+
+###############################################################################
+# TERMINAL                                                                    #
+###############################################################################
+
+# enable secure text entry
+defaults write com.apple.terminal SecureKeyboardEntry -bool true
+# only use UTF-8 in terminal
+defaults write com.apple.terminal StringEncodings -array 4
+
+###############################################################################
+# REBOOT FOR EVERYTHING TO TAKE EFFECT
+echo "Done. Please reboot now."

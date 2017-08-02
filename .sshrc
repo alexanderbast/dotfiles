@@ -1,0 +1,6 @@
+# source .vimrc
+export VIMINIT="let \$MYVIMRC='$SSHHOME/.sshrc.d/.vimrc' | source \$MYVIMRC"
+# better file timestamp formatting
+export TIME_STYLE="long-iso"
+# MySQL promt: 'username@hostname [database]> '
+export MYSQL_PS1="\u@\h [\d]> "
