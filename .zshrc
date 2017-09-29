@@ -2,30 +2,6 @@
 # https://www.zsh.org/
 
 ###############################################################################
-# PLUGINS                                                                     #
-###############################################################################
-
-# use antibody - fastest
-# https://getantibody.github.io/
-source <(antibody init)
-
-# pure promt
-antibody bundle mafredri/zsh-async
-antibody bundle sindresorhus/pure
-# safe pasting
-antibody bundle oz/safe-paste
-# colored man
-antibody bundle zuxfoucault/colored-man-pages_mod
-# missing completions
-antibody bundle zsh-users/zsh-completions
-# fish shell-like autosuggestions
-antibody bundle zsh-users/zsh-autosuggestions
-# fish shell-like syntax highlighting
-antibody bundle zdharma/fast-syntax-highlighting
-# fish shell-like history search
-antibody bundle zdharma/history-search-multi-word
-
-###############################################################################
 # LOCAL                                                                       #
 ###############################################################################
 
@@ -227,6 +203,58 @@ bindkey "^[[A" up-line-or-beginning-search
 bindkey "^[[B" down-line-or-beginning-search
 
 ###############################################################################
+# PLUGINS                                                                     #
+###############################################################################
+
+# use antibody - fastest
+# https://getantibody.github.io/
+source <(antibody init)
+
+# pure promt
+antibody bundle mafredri/zsh-async
+antibody bundle sindresorhus/pure
+# safe pasting
+antibody bundle oz/safe-paste
+# colored man
+antibody bundle zuxfoucault/colored-man-pages_mod
+# missing completions
+antibody bundle zsh-users/zsh-completions
+# better npm completions
+antibody bundle lukechilds/zsh-better-npm-completion
+# fish shell-like autosuggestions
+antibody bundle zsh-users/zsh-autosuggestions
+# fish shell-like syntax highlighting
+antibody bundle zdharma/fast-syntax-highlighting
+# fish shell-like history search
+antibody bundle zdharma/history-search-multi-word
+
+###############################################################################
+# FUNCTIONS                                                                   #
+###############################################################################
+
+function extract {
+  echo Extracting $1 ...
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)  tar xjf $1 ;;
+      *.tar.gz)   tar xzf $1 ;;
+      *.bz2)      bunzip2 $1 ;;
+      *.rar)      rar x $1 ;;
+      *.gz)       gunzip $1 ;;
+      *.tar)      tar xf $1 ;;
+      *.tbz2)     tar xjf $1 ;;
+      *.tgz)      tar xzf $1 ;;
+      *.zip)      unzip $1 ;;
+      *.Z)        uncompress $1 ;;
+      *.7z)       7z x $1 ;;
+      *)          echo "'$1' cannot be extracted via extract()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+###############################################################################
 # ALIASES                                                                     #
 ###############################################################################
 
@@ -254,4 +282,5 @@ alias less="less -nRq"
 alias zshconfig="vim $HOME/.zshrc"
 alias zshreload="source $HOME/.zshrc"
 alias vimconfig="vim $HOME/.vimrc"
-alias macupdate="softwareupdate -i -a; brew update; brew upgrade; brew cleanup; brew prune; npm outdated -g --parseable=true | cut -d : -f 4 | xargs -n 1 npm install -g; antibody update; brew cu -a -y; brew bundle dump --force;"
+alias macupdate="softwareupdate -i -a; brew update; brew upgrade; brew cleanup; brew prune; npm outdated -g --parseable=true | cut -d : -f 4 | xargs -n 1 npm install -g; antibody update; brew cu -a -y; brew bundle dump --force --global;"
+alias rni="kill $(lsof -t -i:8081); rm -rf ios/build/; react-native run-ios"
