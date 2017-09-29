@@ -1,16 +1,27 @@
+// Future versions of Hyper may add additional config options,
+// which will not automatically be merged into this file.
+// See https://hyper.is#cfg for all currently supported options.
+
 module.exports = {
   config: {
+    // Choose either "stable" for receiving highly polished,
+    // or "canary" for less polished but more frequent updates
+    updateChannel: 'canary',
+
     // default font size in pixels for all tabs
     fontSize: 14,
 
     // font family with optional fallbacks
-    fontFamily: 'Hasklig, Source Code Pro',
+    fontFamily: 'Source Code Pro',
 
     // terminal cursor background color and opacity (hex, rgb, hsl, hsv, hwb or cmyk)
     cursorColor: 'rgba(248,28,229,0.8)',
 
     // `BEAM` for |, `UNDERLINE` for _, `BLOCK` for █
     cursorShape: 'BEAM',
+
+    // set to true for blinking cursor
+    cursorBlink: false,
 
     // color of the text
     foregroundColor: '#fff',
@@ -27,8 +38,7 @@ module.exports = {
     // custom css to embed in the terminal window
     termCSS: '',
 
-    // set to `true` if you're using a Linux set up
-    // that doesn't shows native menus
+    // set to `true` (without backticks) if you're using a Linux setup that doesn't show native menus
     // default: `false` on Linux, `true` on Windows (ignored on macOS)
     showHamburgerMenu: '',
 
@@ -64,6 +74,16 @@ module.exports = {
 
     // the shell to run when spawning a new session (i.e. /usr/local/bin/fish)
     // if left empty, your system's login shell will be used by default
+    //
+    // Windows
+    // - Make sure to use a full path if the binary name doesn't work
+    // - Remove `--login` in shellArgs
+    //
+    // Bash on Windows
+    // - Example: `C:\\Windows\\System32\\bash.exe`
+    //
+    // Powershell on Windows
+    // - Example: `C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe`
     shell: '/usr/local/bin/zsh',
 
     // for setting shell arguments (i.e. for using interactive shellArgs: ['-i'])
@@ -78,6 +98,10 @@ module.exports = {
 
     // if true, selected text will automatically be copied to the clipboard
     copyOnSelect: false,
+
+    // if true, on right click selected text will be copied or pasted if no
+    // selection is present (true by default on Windows)
+    // quickEdit: true
 
     // URL to custom bell
     // bellSoundURL: 'http://example.com/bell.mp3',
@@ -110,5 +134,10 @@ module.exports = {
   // in development, you can create a directory under
   // `~/.hyper_plugins/local/` and include it here
   // to load it and avoid it being `npm install`ed
-  localPlugins: []
+  localPlugins: [],
+
+  keymaps: {
+    // Example
+    // 'window:devtools': 'cmd+alt+o',
+  }
 };
