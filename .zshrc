@@ -7,10 +7,8 @@
 
 HIST_STAMPS=dd.mm.yyyy
 
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-export LANGUAGE=en
-export LESSCHARSET=utf-8
+export LANG='en_US.UTF-8'
+export LC_ALL='en_US.UTF-8'
 
 ###############################################################################
 # PATH                                                                        #
@@ -25,11 +23,8 @@ dirs_to_prepend=(
   "/usr/local/mysql/bin"
   "/sw/bin/"
   "$HOME/bin"
-  "$HOME/.rvm/bin"
-  "/usr/local/opt/ruby/bin" # brew ruby
   "/usr/local/opt/coreutils/libexec/gnubin" # brew coreutils
 	"/usr/local/opt/findutils/libexec/gnubin" # brew findutils
-  "/usr/local/share/npm/bin" # brew npm
 )
 
 # explicitly configured $PATH
@@ -71,6 +66,12 @@ export PAGER="less"
 export TIME_STYLE="long-iso"
 # MySQL promt: 'username@hostname [database]> '
 export MYSQL_PS1="\u@\h [\d]> "
+# avoid issues with `gpg` as installed via brew
+export GPG_TTY=$(tty)
+# secure homebrew
+export HOMEBREW_NO_INSECURE_REDIRECT=1
+export HOMEBREW_CASK_OPTS=--require-sha
+export HOMEBREW_NO_ANALYTICS=1
 
 # don't beep
 setopt no_beep
@@ -282,5 +283,5 @@ alias less="less -nRq"
 alias zshconfig="vim $HOME/.zshrc"
 alias zshreload="source $HOME/.zshrc"
 alias vimconfig="vim $HOME/.vimrc"
-alias macupdate="softwareupdate -i -a; brew update; brew upgrade; brew cleanup; brew prune; npm outdated -g --parseable=true | cut -d : -f 4 | xargs -n 1 npm install -g; antibody update; brew cu -a -y; brew bundle dump --force --global;"
+alias macupdate="softwareupdate -i -a; brew update; brew upgrade; brew cleanup; brew prune; npm install -g npm@latest; yarn global upgrade; antibody update; brew cu -a -y; brew bundle dump --force --global;"
 alias rni="kill $(lsof -t -i:8081); rm -rf ios/build/; react-native run-ios"
